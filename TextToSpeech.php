@@ -64,7 +64,7 @@ final class TextToSpeech
     {
         $this->curl->post(self::TEXT_TO_SPEECH_URI, $text);
         $aud_data = $this->curl->response;
-        $name = uniqid('WS_', true) . '.wav';
+        $name = md5(uniqid('WS_', true)) . '.wav';
         file_put_contents('./public/audios/'.$name, $aud_data);
         return $name;
     }
