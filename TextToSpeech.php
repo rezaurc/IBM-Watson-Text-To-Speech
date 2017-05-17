@@ -1,4 +1,18 @@
 <?php
+/**
+ * Copyright (c) 2017. Rezaur Chowdhury <reza@rezaur.net>.
+ *
+ * This file is a part of watson .
+ *
+ * watson
+ *
+ * TextToSpeech.php
+ *
+ * 5/17/17 10:14 PM
+ *
+ * For the full copyright and license information, please view the LICENSE file
+ * that is distributed with the source code.
+ */
 
 /**
  * Created by PhpStorm.
