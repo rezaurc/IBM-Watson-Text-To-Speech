@@ -64,7 +64,7 @@ $app->post('/text-to-speech', function () {
     $data = json_decode($app->request->getBody(), true);
     if( !empty ($data[ 'text' ]) ) {
         $aData = TextToSpeech::getInstance()->post(json_encode($data));
-        echo '<a href=/public/audios/' . $aData . '>Download Audio</a>';
+        echo '<a href=public/audios/' . $aData . '>Download Audio</a>';
     }
 });
 
