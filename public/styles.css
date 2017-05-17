@@ -1,3 +1,7 @@
 .helloInput {
   width: 200px;
 }
+#textInput, #resultBlock {
+  margin-top: 15px;
+  display: grid;
+}

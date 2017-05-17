@@ -15,54 +15,68 @@
  * limitations under the License.
  */
 
- /**
-  * This PHP file uses the Slim Framework to construct a REST API.
-  * See Cloudant.php for the database functionality
-  */
+/**
+ * This PHP file uses the Slim Framework to construct a REST API.
+ * See Cloudant.php for the database functionality
+ */
 require 'vendor/autoload.php';
 require_once('./Cloudant.php');
-$app = new \Slim\Slim();
+require_once('./TextToSpeech.php');
+$app    = new \Slim\Slim();
 $dotenv = new Dotenv\Dotenv(__DIR__);
 try {
-  $dotenv->load();
+    $dotenv->load();
 } catch (Exception $e) {
     error_log("No .env file found");
- }
+}
 $app->get('/', function () {
-  global $app;
+    global $app;
     $app->render('index.html');
 });
 
 $app->get('/api/visitors', function () {
-  global $app;
-  $app->contentType('application/json');
-  $visitors = array();
-  if(Cloudant::Instance()->isConnected()) {
-    $visitors = Cloudant::Instance()->get();
-  }
-  echo json_encode($visitors);
+    global $app;
+    $app->contentType('application/json');
+    $visitors = [];
+    if (Cloudant::Instance()->isConnected()) {
+        $visitors = Cloudant::Instance()->get();
+    }
+    echo json_encode($visitors);
 });
 
-$app->post('/api/visitors', function() {
-	global $app;
-  $visitor = json_decode($app->request()->getBody(), true);
-  if(Cloudant::Instance()->isConnected()) {
-    Cloudant::Instance()->post($visitor);
-    echo sprintf("Hello %s, I've added you to the database!", $visitor['name']);
-  } else {
-    echo sprintf("Hello %s!", $visitor['name']);
-  }
+$app->post('/api/visitors', function () {
+    global $app;
+    $visitor = json_decode($app->request()->getBody(), true);
+    if (Cloudant::Instance()->isConnected()) {
+        Cloudant::Instance()->post($visitor);
+        echo sprintf("Hello %s, I've added you to the database!",
+          $visitor['name']);
+    } else {
+        echo sprintf("Hello %s!", $visitor['name']);
+    }
 });
 
-$app->delete('/api/visitors/:id', function($id) {
-	global $app;
-	Cloudant::Instance()->delete($id);
+/**
+ * text to speech
+ */
+$app->post('/text-to-speech', function () {
+    global $app;
+    $data = json_decode($app->request->getBody(), true);
+    if( !empty ($data[ 'text' ]) ) {
+        $aData = TextToSpeech::getInstance()->post(json_encode($data));
+        echo '<a href=/public/audios' . $aData . '>Download Audio</a>';
+    }
+});
+
+$app->delete('/api/visitors/:id', function ($id) {
+    global $app;
+    Cloudant::Instance()->delete($id);
     $app->response()->status(204);
 });
 
-$app->put('/api/visitors/:id', function($id) {
-	global $app;
-	$visitor = json_decode($app->request()->getBody(), true);
+$app->put('/api/visitors/:id', function ($id) {
+    global $app;
+    $visitor = json_decode($app->request()->getBody(), true);
     echo json_encode(Cloudant::Instance()->put($id, $visitor));
 });
 

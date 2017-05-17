@@ -1,5 +1,7 @@
 ---
 applications:
+ - services:
+   - text-to-speech-service
  - name: GetStartedPHP
    random-route: true
    memory: 128M
