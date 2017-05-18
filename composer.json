@@ -1,5 +1,8 @@
 {
+    "name": "rezaur/watson-text-to-speech",
+    "license": "proprietary",
     "require": {
+        "php": ">=5.6.25",
         "slim/slim": "2.*",
         "vlucas/phpdotenv": "^2.4",
         "php-curl-class/php-curl-class": "^7.3"
